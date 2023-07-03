@@ -1,10 +1,11 @@
 from turtle import Turtle
 import random
+
 UP = 90
 DOWN = 270
 LEFT = 180
 RIGHT = 0
-snake_pos = [(0,0),(-20,0),(-40,0)]
+snake_pos = [(0, 0), (-20, 0), (-40, 0)]
 MOVE_DISTANCE = 22
 Food_list = []
 '''
@@ -68,7 +69,7 @@ class Snake:
 
     def reset(self):
         for i in self.segments:
-            i.goto(350,350)
+            i.goto(350, 350)
         self.segments.clear()
         self.make_snake()
         self.head = self.segments[0]
@@ -96,8 +97,15 @@ FONT = ('Arial', 15, 'bold')
 class ScoreBoard(Turtle):
     def __init__(self):
         super().__init__()
-        with open("data.txt", mode="r") as h_value:
-            self.high_score = int(h_value.read())
+        try:
+            with open("data.txt", mode="r") as h_value:
+                self.high_score = int(h_value.read())
+        except FileNotFoundError:
+            with open("data.txt", mode="x") as h_value:
+                h_value.write("0")
+            with open("data.txt", mode="r") as h_value:
+                self.high_score = int(h_value.read())
+
         self.score = 0
         self.ht()
         self.color("white")
@@ -107,12 +115,12 @@ class ScoreBoard(Turtle):
 
     def update(self):
         self.clear()
-        self.write(f"Score board: {self.score}  High Score: {self.high_score}",align=ALIGNMENT, font=FONT )
+        self.write(f"Score board: {self.score}  High Score: {self.high_score}", align=ALIGNMENT, font=FONT)
 
     def reset(self):
         if self.score > self.high_score:
             self.high_score = self.score
-            with open("../../OneDrive/Desktop/data.txt", mode="w") as h_value:
+            with open("data.txt", mode="w") as h_value:
                 h_value.write(f"{self.score}")
         self.score = 0
         self.update()
